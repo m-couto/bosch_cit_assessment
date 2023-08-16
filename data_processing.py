@@ -198,3 +198,20 @@ def process_data(dataset_path, verbose=True):
 
     return df
 
+
+if __name__=='__main__':
+
+    paths_to_datasets = [
+        'datasets/dep_energy/alt_fuel_stations.csv',
+        'datasets/epa/vehicles.csv'
+    ]
+
+    for dataset_path in paths_to_datasets:
+
+        processed_df = process_data(dataset_path)
+
+        processed_dataset_path = dataset_path.split('/')
+        processed_dataset_path[-1] = 'processed_' + processed_dataset_path[-1]
+        processed_dataset_path = '/'.join(processed_dataset_path)
+
+        processed_df.to_csv(processed_dataset_path, index=False)

@@ -164,15 +164,23 @@ def process_tag_features(df, tag_feats):
     return df
 
 
-def transform_data(df, source, verbose=True):
+def transform_data(processed_dataset_path, source, verbose=True):
     '''
     Process each feature according to its type.
     '''
+
+    df = pd.read_csv(processed_dataset_path)
 
     # if source is neither dep_energy or epa, exit the function with warning
     if source not in features_to_keep_per_source.keys():
         print('Unknown source')
         return df
+
+    if source=='dep_energy':
+        df['Open Date'] = pd.to_datetime(df['Open Date'])
+    elif source=='epa':
+        df['createdOn'] = pd.to_datetime(df['createdOn'])
+        df['modifiedOn'] = pd.to_datetime(df['modifiedOn'])
     
     feats_dict = features_to_keep_per_source[source]
     features_to_keep = [item for sublist in list(feats_dict.values()) for item in sublist]
@@ -202,3 +210,18 @@ def transform_data(df, source, verbose=True):
 
     return df
 
+
+if __name__=='__main__':
+
+    paths_to_datasets = [
+        'datasets/dep_energy/processed_alt_fuel_stations.csv',
+        'datasets/epa/processed_vehicles.csv'
+    ]
+
+    for dataset_path in paths_to_datasets:
+
+        source = dataset_path.split('/')[-2]
+        transformed_df = transform_data(dataset_path, source)
+
+        transformed_dataset_path = dataset_path.replace('/processed', '/transformed')
+        transformed_df.to_csv(transformed_dataset_path, index=False)

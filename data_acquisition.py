@@ -5,19 +5,11 @@ import zipfile
 
 dataset_folder_name = 'datasets'
 
-
-# create datasets folder
-if not os.path.exists(dataset_folder_name):
-    os.mkdir(dataset_folder_name)
-    print('Created folder for data successfully')
-
-
 # retrieving my personal API key for datasets in developer.nrel
 # (required for Alternative Fuel Stations dataset)
 with open('api_key.txt') as f:
     api_key = f.readlines()
 api_key = api_key[0]
-
 
 dataset_links = {
     # 'nhtsa': 'https://www.nhtsa.gov/nhtsa-datasets-and-apis',
@@ -32,23 +24,30 @@ dataset_links = {
 }
 
 
-for source, (url_link, filename) in dataset_links.items():
+if __name__=='__main__':
 
-    # create directory for datasets from this source
-    if not os.path.exists(dataset_folder_name + '/' + source):
-        os.mkdir(dataset_folder_name + '/' + source)
-        print(f'Created subfolder for {source} data successfully')
-    
-    # download data into source folder
-    filepath = dataset_folder_name + '/' + source + '/' + filename
-    response = requests.get(url_link)
-    open(filepath, "wb").write(response.content)
-    print('File downloaded successfully:', filename)
+    # create datasets folder
+    if not os.path.exists(dataset_folder_name):
+        os.mkdir(dataset_folder_name)
+        print('Created folder for data successfully')
 
-    # if the file is zipped, unzip it
-    if filename.endswith('.zip'):
-        with zipfile.ZipFile(filepath, 'r') as zip_ref:
-            zip_ref.extractall(dataset_folder_name + '/' + source)
+    for source, (url_link, filename) in dataset_links.items():
 
-        filename = filename[:-4]
-        print('File unzipped successfully:', filename)
+        # create directory for datasets from this source
+        if not os.path.exists(dataset_folder_name + '/' + source):
+            os.mkdir(dataset_folder_name + '/' + source)
+            print(f'Created subfolder for {source} data successfully')
+        
+        # download data into source folder
+        filepath = dataset_folder_name + '/' + source + '/' + filename
+        response = requests.get(url_link)
+        open(filepath, "wb").write(response.content)
+        print('File downloaded successfully:', filename)
+
+        # if the file is zipped, unzip it
+        if filename.endswith('.zip'):
+            with zipfile.ZipFile(filepath, 'r') as zip_ref:
+                zip_ref.extractall(dataset_folder_name + '/' + source)
+
+            filename = filename[:-4]
+            print('File unzipped successfully:', filename)
