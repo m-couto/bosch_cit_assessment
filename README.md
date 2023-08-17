@@ -8,3 +8,4 @@ Here is an explanation of the files:
 - 'data_transformation.py': the function `transform_data` performs further processing on the data, mainly preparing it into a format that can be used for modelling, that is converting all features into numerical.
 - 'data_loading.py': a script for loading a dataset into a SQL Server.
 - The datasets folder contains the datasets required for this challenge, as well as their respective processed and transformed versions.
+- 'bosch_task_presentation.pptx': a Power Point presentation on this task.
