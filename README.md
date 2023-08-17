@@ -1,4 +1,4 @@
-# bosch_cit_assessment
+# Bosch CIT Assessment
 
 This repository contains my solution to the technical task proposed by Bosch - CIT (connected innovation topics).
 
